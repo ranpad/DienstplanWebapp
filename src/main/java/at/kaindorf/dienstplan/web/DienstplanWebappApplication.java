@@ -1,4 +1,4 @@
-package at.kaindorf.dienstplan;
+package at.kaindorf.dienstplan.web;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
