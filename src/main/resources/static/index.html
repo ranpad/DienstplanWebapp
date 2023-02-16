@@ -1,31 +1,57 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Dienstplan - WebApp</title>
+    <title>Dienstplan WebApp</title>
     <style>
+
+        *{
+            background-color: rgb(204, 229, 255);
+        }
+
         .drop-zone {
-            border: 2px dashed #ccc;
-            padding: 20px;
+            border: 2px dashed rgb(0, 0, 0);
+            margin-top: 20px;
+            margin-left: 220px;
+            margin-right: 220px;
             text-align: center;
             font-size: 18px;
-            color: #666;
+            color: black;
             cursor: pointer;
         }
+
         .drop-zone.highlight {
             background-color: #eee;
         }
+
         .excel-icon {
             display: none;
         }
+
+        .upload-icon {
+            display: none;
+            padding-left: 48.5%;
+            margin-top: 20px;
+        }
+
     </style>
 </head>
 <body>
 <h1 style="text-align:center; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: 50px">Dienstplan WebApp</h1>
-<div class="drop-zone" id="dropZone">Ziehen Sie hier Ihre Excel-Datei oder klicken Sie hier, um sie auszuwählen.</div>
-<img class="excel-icon" id="excelIcon" src="https://img.icons8.com/color/48/000000/microsoft-excel-2019--v2.png" alt="Excel Icon">
-<p id="fileName"></p>
+<div class="drop-zone" id="dropZone" style="text-align:center; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: 30px">
 
-<button style="font-size: 20px">Upload</button>
+    <br><br><br>
+
+    <p id="excelInputTEXT">Klicken oder ziehen Sie hier Ihre Excel-Datei hinein.</p>
+    <img id="excelIcon" class="excel-icon" height="100px" width="auto" src="https://img.icons8.com/color/256/microsoft-excel-2019.png" alt="Excel Icon">
+    <p style="color: black" id="fileName"></p>
+
+    <br><br><br>
+
+</div>
+
+<img id="uploadIcon" onclick="uploadFunction();" class="upload-icon" height="100px" width="auto" src="https://cdn-icons-png.flaticon.com/512/126/126477.png" alt="Upload Icon">
+
+</body>
 
 <script>
     // Set up the drop zone
@@ -45,11 +71,7 @@
         dropZone.classList.remove('highlight');
         const file = event.dataTransfer.files[0];
         if (file.type === 'application/vnd.ms-excel' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-            const fileName = file.name;
-            const excelIcon = document.getElementById('excelIcon');
-            const fileNameDisplay = document.getElementById('fileName');
-            excelIcon.style.display = 'inline-block';
-            fileNameDisplay.innerText = fileName;
+            displayFileInfo(file);
         }
     });
 
@@ -60,7 +82,7 @@
     fileInput.style.display = 'none';
     document.body.appendChild(fileInput);
 
-    const browseButton = document.getElementById('browseButton');
+    const browseButton = document.getElementById('dropZone');
     browseButton.addEventListener('click', () => {
         fileInput.click();
     });
@@ -68,13 +90,29 @@
     fileInput.addEventListener('change', () => {
         const file = fileInput.files[0];
         if (file.type === 'application/vnd.ms-excel' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
-            const fileName = file.name;
-            const excelIcon = document.getElementById('excelIcon');
-            const fileNameDisplay = document.getElementById('fileName');
-            excelIcon.style.display = 'inline-block';
-            fileNameDisplay.innerText = fileName;
+            displayFileInfo(file);
         }
     });
+
+    // Function to display file info
+    function displayFileInfo(file) {
+        const fileName = file.name;
+
+        const excelIcon = document.getElementById('excelIcon');
+        const fileNameDisplay = document.getElementById('fileName');
+        excelIcon.style.display = 'inline-block';
+        fileNameDisplay.innerText = fileName;
+
+        document.getElementById('excelInputTEXT').innerHTML = "";
+
+        const uploadIcon = document.getElementById('uploadIcon');
+        uploadIcon.style.display = 'inline-block';
+    }
+
+    const uploadFunction = () => {
+        alert("Upload!");
+    }
+
 </script>
-</body>
+
 </html>
