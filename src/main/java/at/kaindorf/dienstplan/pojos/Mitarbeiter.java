@@ -13,8 +13,8 @@ import java.util.List;
 public class Mitarbeiter {
     private String firstname;
     private String lastname;
-    private double workingnumbers;
-    private double totoalworkingnumbers;
-    private String workrole;
+    private double workingNumbers;
+    private double totalWorkingNumbers;
+    private String workRole;
     private List<String> calenderDays;
 }
