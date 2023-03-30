@@ -35,6 +35,8 @@
 
     </style>
     <script src="main.js"></script>
+    <script src="ExcelPusher.js"></script>
+    <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
 <h1 style="text-align:center; font-family:'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif; font-size: 50px">Dienstplan WebApp</h1>
@@ -58,6 +60,7 @@
     // Set up the drop zone
     const dropZone = document.getElementById('dropZone');
 
+
     dropZone.addEventListener('dragover', (event) => {
         event.preventDefault();
         dropZone.classList.add('highlight');
@@ -71,6 +74,8 @@
         event.preventDefault();
         dropZone.classList.remove('highlight');
         const file = event.dataTransfer.files[0];
+
+        pushFile(file);
         if (file.type === 'application/vnd.ms-excel' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
             displayFileInfo(file);
         }
@@ -108,13 +113,12 @@
 
         const uploadIcon = document.getElementById('uploadIcon');
         uploadIcon.style.display = 'inline-block';
+        pushFile(file);
     }
 
     const uploadFunction = () => {
-        alert("Upload!");
+        console.log("working");
     }
-
-    var myVar = 'Hello, World!';
 
 </script>
 

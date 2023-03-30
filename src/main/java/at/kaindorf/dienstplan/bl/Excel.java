@@ -1,8 +1,10 @@
 package at.kaindorf.dienstplan.bl;
 
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -53,5 +55,24 @@ public class Excel {
 
         assert rows != null;
         return rows.toString();
+    }
+    public void writeToExcel(List<List<String>> rows) throws IOException {
+        String filePath = "src/main/resources/Excel/FertigerPlan.xlsx";
+        Workbook workbook = new XSSFWorkbook();
+        Sheet sheet = workbook.createSheet("Sheet1");
+
+        int rowIndex = 0;
+        for (List<String> row : rows) {
+            Row newRow = sheet.createRow(rowIndex++);
+            int columnIndex = 0;
+            for (String value : row) {
+                Cell cell = newRow.createCell(columnIndex++);
+                cell.setCellValue(value);
+            }
+        }
+        FileOutputStream outputStream = new FileOutputStream(filePath);
+        workbook.write(outputStream);
+        workbook.close();
+        outputStream.close();
     }
 }
