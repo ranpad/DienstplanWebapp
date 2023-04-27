@@ -1,7 +1,25 @@
+// @ts-ignore
 import * as XLSX from 'xlsx';
 
-// Read the Excel file
+const getExcelList = () => {
 
+    const url = '/api/excel/get';
+
+    fetch(url)
+        .then(res => {
+            if (!res.ok) {
+                document.getElementById('errorMsg').innerHTML = "GET request failed! HTTP-Status: " + res.status;
+                throw Error("fetch failed!");
+            }
+            document.getElementById('errorMsg').innerHTML = "GET request succeeded!";
+            return res.json();
+        })
+        .then(res => {
+            console.log("HIER IST DIE LISTE")
+            console.log(res);
+        })
+        .catch(err => console.log(err));
+};
 
 
 function pushFile(blob: Blob) {

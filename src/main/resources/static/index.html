@@ -52,6 +52,8 @@
 
 </div>
 
+<button onclick="getExcelList();" id="downloadButtonID">DOWNLOAD</button>
+
 <img id="uploadIcon" onclick="uploadFunction();" class="upload-icon" height="100px" width="auto" src="https://cdn-icons-png.flaticon.com/512/126/126477.png" alt="Upload Icon">
 
 </body>
@@ -80,7 +82,6 @@
             displayFileInfo(file);
         }
     });
-
     // Set up file input
     const fileInput = document.createElement('input');
     fileInput.setAttribute('type', 'file');
@@ -116,9 +117,6 @@
         pushFile(file);
     }
 
-    const uploadFunction = () => {
-        console.log("working");
-    }
 
 </script>
 
