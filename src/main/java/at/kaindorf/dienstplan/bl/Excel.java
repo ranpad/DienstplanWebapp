@@ -6,6 +6,8 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -69,6 +71,9 @@ public class Excel {
                 Cell cell = newRow.createCell(columnIndex++);
                 cell.setCellValue(value);
             }
+        }
+        if (!Files.exists(Path.of(filePath))){
+            Files.createFile(Path.of(filePath));
         }
         FileOutputStream outputStream = new FileOutputStream(filePath);
         workbook.write(outputStream);
