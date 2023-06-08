@@ -1,17 +1,16 @@
 // @ts-ignore
 import * as XLSX from 'xlsx';
 
-const getExcelList = () => {
+function getExcelList() {
 
-    const url = '/api/excel/get';
-
-    fetch(url)
+    fetch('http://localhost:8080/api/excel/get')
         .then(res => {
             if (!res.ok) {
-                document.getElementById('errorMsg').innerHTML = "GET request failed! HTTP-Status: " + res.status;
+                alert("GET request failed! HTTP-Status: " + res.status);
                 throw Error("fetch failed!");
             }
-            document.getElementById('errorMsg').innerHTML = "GET request succeeded!";
+            console.log(res);
+            alert("GET request succeeded!");
             return res.json();
         })
         .then(res => {
@@ -19,7 +18,7 @@ const getExcelList = () => {
             console.log(res);
         })
         .catch(err => console.log(err));
-};
+}
 
 
 function pushFile(blob: Blob) {
@@ -45,7 +44,7 @@ function pushFile(blob: Blob) {
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(jsonData)
         }
-        fetch('http://localhost:8080/api/excel', requestOptions)
+        fetch('http://localhost:8080/api/excel/post', requestOptions)
             .then(response => {
                 alert('File uploaded successfully!');
             })

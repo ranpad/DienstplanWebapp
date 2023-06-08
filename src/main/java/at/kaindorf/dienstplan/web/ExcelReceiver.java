@@ -34,7 +34,6 @@ public class ExcelReceiver {
             try {
                 excel.writeToExcel(jsonString);
             } catch (IOException e) {
-
                 throw new RuntimeException(e);
             }
             return ResponseEntity.ok().build();
