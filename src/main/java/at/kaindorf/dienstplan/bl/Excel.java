@@ -1,13 +1,18 @@
 package at.kaindorf.dienstplan.bl;
 
+import at.kaindorf.dienstplan.pojos.Mitarbeiter;
 import org.apache.poi.ss.usermodel.*;
+import org.apache.poi.xssf.usermodel.XSSFColor;
+import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class Excel {
+
+
     public static void main(String[] args) throws IOException {
 
     }
@@ -73,18 +78,119 @@ public class Excel {
         Workbook workbook = new XSSFWorkbook();
         Sheet sheet = workbook.createSheet("Sheet1");
 
+        Font font = workbook.createFont();
+        font.setColor(IndexedColors.RED.getIndex());
+
+        CellStyle cellStyle = workbook.createCellStyle();
+        cellStyle.setFont(font);
+
+
         int rowIndex = 0;
         for (List<String> row : rows) {
             Row newRow = sheet.createRow(rowIndex++);
             int columnIndex = 0;
             for (String value : row) {
                 Cell cell = newRow.createCell(columnIndex++);
-                cell.setCellValue(value);
+                //Prüft ob auf Value gespeicherter Wert eine Zahl ist
+                if (value != null && value.matches("\\b\\d+")){
+                    cell.setCellValue(Double.parseDouble(value));
+                }else{
+                    cell.setCellValue(value);
+                }
+
+                if(value != null && (value.equals("F") || value.equals("U"))){
+                    cell.setCellStyle(cellStyle);
+                }
+
+
             }
         }
+
+        autoSizeColumns(sheet, 40);
+        formatColumns(workbook, sheet, font);
+
         FileOutputStream outputStream = new FileOutputStream(filePath);
         workbook.write(outputStream);
         workbook.close();
         outputStream.close();
+    }
+
+    public static void autoSizeColumns(Sheet sheet, int numberOfColumns) {
+        for (int columnIndex = 0; columnIndex < numberOfColumns; columnIndex++) {
+            sheet.autoSizeColumn(columnIndex);
+        }
+    }
+
+    public void formatColumns(Workbook workbook, Sheet sheet, Font font){
+        List<String> saturdayList = new ArrayList<>();
+        List<String> sundayList = new ArrayList<>();
+
+        CellStyle saturdayStyle = workbook.createCellStyle();
+        saturdayStyle.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        saturdayStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        CellStyle saturdayStyleRed = workbook.createCellStyle();
+        saturdayStyleRed.setFillForegroundColor(IndexedColors.YELLOW.getIndex());
+        saturdayStyleRed.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        saturdayStyleRed.setFont(font);
+
+        CellStyle sundayStyle = workbook.createCellStyle();
+        sundayStyle.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        sundayStyle.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+
+        CellStyle sundayStyleRed = workbook.createCellStyle();
+        sundayStyleRed.setFillForegroundColor(IndexedColors.GREY_25_PERCENT.getIndex());
+        sundayStyleRed.setFillPattern(FillPatternType.SOLID_FOREGROUND);
+        sundayStyleRed.setFont(font);
+
+        Row firstRow = sheet.getRow(0);
+
+        for (Cell cell : firstRow){
+            String cellValue = cell.getStringCellValue();
+            String columnIndex = String.valueOf(cell.getColumnIndex());
+            if (cellValue.equals("Sa.")){
+                saturdayList.add(columnIndex);
+            }
+
+            if (cellValue.equals("So.")){
+                sundayList.add(columnIndex);
+            }
+        }
+        System.out.println(saturdayList);
+        System.out.println(sundayList);
+
+        Iterator<Row> rowIterator = sheet.iterator();
+
+        while(rowIterator.hasNext()){
+            Row row = rowIterator.next();
+            Iterator<Cell> cellIterator = row.iterator();
+
+            while (cellIterator.hasNext()){
+                Cell cell = cellIterator.next();
+                String cellColumnIndex = String.valueOf(cell.getColumnIndex());
+                String cellValue = null;
+
+                if (cell.getCellType() == CellType.STRING){
+                    cellValue = cell.getStringCellValue();
+                }
+                if (cell.getCellType() == CellType.NUMERIC){
+                    cellValue = String.valueOf(cell.getNumericCellValue());
+                }
+
+                if (saturdayList.contains(cellColumnIndex)){
+                    cell.setCellStyle(saturdayStyle);
+                    if (cellValue != null && (cellValue.equals("F") || cellValue.equals("U"))){
+                        cell.setCellStyle(saturdayStyleRed);
+                    }
+                }
+                if (sundayList.contains(cellColumnIndex)){
+                    cell.setCellStyle(sundayStyle);
+                    if (cellValue != null && (cellValue.equals("F") || cellValue.equals("U"))){
+                        cell.setCellStyle(sundayStyleRed);
+                    }
+                }
+
+            }
+        }
     }
 }
