@@ -34,8 +34,8 @@
         }
 
     </style>
-    <script src="main.js"></script>
     <script src="ExcelPusher.js"></script>
+
     <script src="https://unpkg.com/xlsx/dist/xlsx.full.min.js"></script>
 </head>
 <body>
@@ -52,7 +52,7 @@
 
 </div>
 
-<img id="uploadIcon" onclick="uploadFunction();" class="upload-icon" height="100px" width="auto" src="https://cdn-icons-png.flaticon.com/512/126/126477.png" alt="Upload Icon">
+<button onclick="getExcelList();" id="downloadButtonID">DOWNLOAD</button>
 
 </body>
 
@@ -75,12 +75,11 @@
         dropZone.classList.remove('highlight');
         const file = event.dataTransfer.files[0];
 
-        pushFile(file);
+        //pushFile(file);
         if (file.type === 'application/vnd.ms-excel' || file.type === 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet') {
             displayFileInfo(file);
         }
     });
-
     // Set up file input
     const fileInput = document.createElement('input');
     fileInput.setAttribute('type', 'file');
@@ -110,15 +109,9 @@
         fileNameDisplay.innerText = fileName;
 
         document.getElementById('excelInputTEXT').innerHTML = "";
-
-        const uploadIcon = document.getElementById('uploadIcon');
-        uploadIcon.style.display = 'inline-block';
         pushFile(file);
     }
 
-    const uploadFunction = () => {
-        console.log("working");
-    }
 
 </script>
 
